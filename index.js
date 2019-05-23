@@ -31,7 +31,7 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 
   for (var i in urls) {
     console.log(urls[i]);
-    downloader.add(url, { "path": "./downloads" });
+    downloader.add(urls[i], { "path": "./downloads" });
   }
 
   //startTorrent(urls[index]);
