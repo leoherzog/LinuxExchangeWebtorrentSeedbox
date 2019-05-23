@@ -1,0 +1,17 @@
+{
+  "name": "seedbox",
+  "version": "1.0.0",
+  "description": "A bridge between official torrents and webtorrent seeds on linux.exchange",
+  "author": "Leo Herzog",
+  "main": "index.js",
+  "keywords": [],
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "webtorrent-hybrid": "latest",
+    "get-json": "latest",
+    "pretty-bytes": "latest"
+  },
+  "license": "CC-BY-SA-4.0"
+}
