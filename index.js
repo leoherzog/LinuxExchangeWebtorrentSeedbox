@@ -28,7 +28,7 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
   for (var i in response.distros) {
     for (var j in response.distros[i].versions) {
       //console.log(response.distros[i].versions[j].url + trackerString + "\n");
-      urls.push(response.distros[i].versions[j]["magnet-url"] + trackerString + "&ws=" + response.distros[i].versions[j]["direct-download-url"]);
+      urls.push(response.distros[i].versions[j]["magnet-url"] + trackerString + "&ws=" + encodeURIComponent(response.distros[i].versions[j]["direct-download-url"]));
     }
   }
 
