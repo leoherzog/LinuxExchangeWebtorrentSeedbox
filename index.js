@@ -46,10 +46,13 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 });
 
 function checkProgress() {
-  console.log("Total Torrents: " + downloader.torrents.length + ", Download: " + pretty(downloader.downloadSpeed) + "/s, Upload: " + pretty(downloader.uploadSpeed) + "/s");
+  var percentage = 0;
   var individualprogress = "";
   for (var i in downloader.torrents) {
+    percentage = percentage + downloader.torrents[i].progress;
     individualprogress += "[" + i + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
   }
+  percentage = percentage / downloader.torrents.length;
+  console.log("Total Torrents: " + downloader.torrents.length + ", Cache " + (percentage * 100).toFixed(1) + "% Filled, Download: " + pretty(downloader.downloadSpeed) + "/s, Upload: " + pretty(downloader.uploadSpeed) + "/s");
   console.log(individualprogress);
 }
