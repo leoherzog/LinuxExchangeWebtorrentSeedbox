@@ -2,10 +2,13 @@
 
 const fs = require('fs');
 const Webtorrent = require('webtorrent');
+const WebtorrentHybrid = require('webtorrent-hybrid');
 const getJSON = require('get-json');
 const pretty = require('prettier-bytes');
+const chalk = require('chalk');
 
 var downloader = new Webtorrent();
+var seeder = new WebtorrentHybrid();
 
 var urls = [];
 
@@ -38,7 +41,14 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 
   for (var i in urls) {
     // console.log(urls[i] + "\n");
-    downloader.add(urls[i], { "path": "./downloads" });
+    downloader.add(urls[i], { "path": "./downloads" }, function(torrent) {
+      torrent.on('done', function(torrent) {
+        console.log("Transferring " + torrent.infoHash + " from Downloader to Seeder...");
+        torrent.destroy(function (torrent) {
+          seeder.add(torrent.magnetURI, { "path": "./downloads" });
+        });
+      });
+    });
   }
 
   setInterval(checkProgress, 2000);
@@ -53,6 +63,9 @@ function checkProgress() {
     individualprogress += "[" + i + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
   }
   percentage = percentage / downloader.torrents.length;
-  console.log("Total Torrents: " + downloader.torrents.length + ", Cache " + (percentage * 100).toFixed(1) + "% Filled, Download: " + pretty(downloader.downloadSpeed) + "/s, Upload: " + pretty(downloader.uploadSpeed) + "/s");
+  var summary = "";
+  summary += chalk.green((percentage * 100).toFixed(1) + "%") + " Done Downloading " + chalk.green(downloader.torrents.length) + " Torrents, Seeding " + chalk.green(seeder.torrents.length) + " WebTorrents ";
+  summary += "↓ " + chalk.green(pretty(downloader.downloadSpeed + seeder.downloadSpeed) + "/s") + " ↑ " + chalk.green(pretty(downloader.uploadSpeed + seeder.uploadSpeed) + "/s");
+  console.log(summary);
   console.log(individualprogress);
 }

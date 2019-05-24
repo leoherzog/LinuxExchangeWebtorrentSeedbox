@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "webtorrent": "latest",
+    "webtorrent-hybrid": "latest",
     "get-json": "latest",
-    "prettier-bytes": "latest"
+    "prettier-bytes": "latest",
+    "chalk": "latest"
   },
   "license": "CC-BY-SA-4.0"
 }
