@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const Webtorrent = require('webtorrent-hybrid');
+const Webtorrent = require('webtorrent');
 const getJSON = require('get-json');
 const pretty = require('prettier-bytes');
 
