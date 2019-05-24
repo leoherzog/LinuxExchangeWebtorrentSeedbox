@@ -11,7 +11,7 @@
   "dependencies": {
     "webtorrent-hybrid": "latest",
     "get-json": "latest",
-    "pretty-bytes": "latest"
+    "prettier-bytes": "latest"
   },
   "license": "CC-BY-SA-4.0"
 }

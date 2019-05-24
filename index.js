@@ -3,7 +3,7 @@
 const fs = require('fs');
 const Webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
-const prettyBytes = require('pretty-bytes');
+const pretty = require('prettier-bytes');
 
 var downloader = new Webtorrent();
 
@@ -50,7 +50,7 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 
 function checkProgress() {
 
-  console.log("Total Torrents: " + downloader.torrents.length + ", Download: " + prettyBytes(downloader.downloadSpeed) + "/s, Upload: " + prettyBytes(downloader.uploadSpeed) + "/s");
+  console.log("Total Torrents: " + downloader.torrents.length + ", Download: " + pretty(downloader.downloadSpeed) + "/s, Upload: " + pretty(downloader.uploadSpeed) + "/s");
   var individualprogress = "";
   for (var i in downloader.torrents) {
     individualprogress += "[" + i + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
