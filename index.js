@@ -40,33 +40,15 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     downloader.add(urls[i], { "path": "./downloads" });
   }
 
-  for (var i in downloader.torrents) {
-    downloader.torrents[i].pause();
-  }
-
   setInterval(checkProgress, 2000);
 
 });
 
 function checkProgress() {
-
   console.log("Total Torrents: " + downloader.torrents.length + ", Download: " + pretty(downloader.downloadSpeed) + "/s, Upload: " + pretty(downloader.uploadSpeed) + "/s");
   var individualprogress = "";
   for (var i in downloader.torrents) {
     individualprogress += "[" + i + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
   }
   console.log(individualprogress);
-
-  var unfinishedTorrents = downloader.torrents.filter(function (torrent) {
-    return torrent.progress < 1;
-  });
-
-  // go through and unpause the first {maxDownloading} torrents
-  for (var i in unfinishedTorrents) {
-    if (i == maxDownloading) {
-      break;
-    }
-    unfinishedTorrents[i].resume();
-  }
-
 }
