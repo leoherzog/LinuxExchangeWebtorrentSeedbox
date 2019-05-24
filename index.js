@@ -7,7 +7,6 @@ const pretty = require('prettier-bytes');
 
 var downloader = new Webtorrent();
 
-var maxDownloading = 2;
 var urls = [];
 
 if (!fs.existsSync('./downloads')) {
