@@ -17,7 +17,8 @@ if (!fs.existsSync('./downloads')) {
 getJSON('https://linux.exchange/distros.json', function (error, response) {
 
   if (error) {
-    console.log(error);
+    console.log(error.message);
+    process.exit();
   }
 
   var trackerString = "";
