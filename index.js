@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const Webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
 const prettyBytes = require('pretty-bytes');
@@ -8,6 +9,10 @@ var downloader = new Webtorrent();
 
 var index = 0;
 var urls = [];
+
+if (!fs.existsSync('./downloads')) {
+  fs.mkdirSync('./downloads');
+}
 
 getJSON('https://linux.exchange/distros.json', function (error, response) {
 
