@@ -64,7 +64,7 @@ function checkProgress() {
   }
   percentage = percentage / downloader.torrents.length;
   var summary = "";
-  summary += chalk.green((percentage * 100).toFixed(1) + "%") + " Done Downloading " + chalk.green(downloader.torrents.length) + " Torrents, Seeding " + chalk.green(seeder.torrents.length) + " WebTorrents ";
+  summary += chalk.green((percentage * 100).toFixed(1) + "% Done") + " Downloading " + chalk.green(downloader.torrents.length) + " Torrents, Seeding " + chalk.green(seeder.torrents.length) + " WebTorrents ";
   summary += "↓ " + chalk.green(pretty(downloader.downloadSpeed + seeder.downloadSpeed) + "/s") + " ↑ " + chalk.green(pretty(downloader.uploadSpeed + seeder.uploadSpeed) + "/s");
   console.log(summary);
   console.log(individualprogress);
