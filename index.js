@@ -60,7 +60,7 @@ function checkProgress() {
   var individualprogress = "";
   for (var i in downloader.torrents) {
     percentage = percentage + downloader.torrents[i].progress;
-    individualprogress += "[" + (new Number(i) + 1) +  + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
+    individualprogress += "[" + (new Number(i) + 1) + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
   }
   percentage = percentage / downloader.torrents.length;
   var summary = "";
