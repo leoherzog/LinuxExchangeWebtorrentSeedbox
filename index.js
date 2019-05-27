@@ -44,9 +44,8 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     downloader.add(urls[i], { "path": "./downloads" }, function(torrent) {
       torrent.on('done', function() {
         console.log("Transferring " + torrent.infoHash + " from Downloader to Seeder...");
-        torrent.destroy(function () {
-          seeder.add(torrent.magnetURI, { "path": "./downloads" });
-        });
+        seeder.add(torrent.magnetURI, { "path": "./downloads" });
+        torrent.destroy();
       });
     });
   }
