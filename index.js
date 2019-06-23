@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const WebtorrentHybrid = require('webtorrent-hybrid');
+const webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
 const pretty = require('prettier-bytes');
 const chalk = require('chalk');
 
-var downloader = new WebtorrentHybrid();
+var downloader = new webtorrent();
 
 var urls = [];
 
-if (!fs.existsSync('./downloads')) {
-  fs.mkdirSync('./downloads');
+if (!fs.existsSync('/tmp')) {
+  throw "/tmp does not exist";
 }
 
 getJSON('https://linux.exchange/distros.json', function (error, response) {
@@ -34,7 +34,7 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 
   for (var i in urls) {
     // console.log(urls[i] + "\n");
-    downloader.add(urls[i], { "path": "./downloads" });
+    downloader.add(urls[i], { "path": "/tmp" });
   }
 
   setInterval(checkProgress, 2000);
