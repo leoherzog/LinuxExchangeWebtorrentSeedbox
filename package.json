@@ -9,7 +9,6 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "webtorrent": "latest",
     "webtorrent-hybrid": "latest",
     "get-json": "latest",
     "prettier-bytes": "latest",
