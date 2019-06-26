@@ -23,9 +23,14 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 
   for (var i in response.distros) {
     for (var j in response.distros[i].versions) {
-      var url = response.distros[i].versions[j]["magnet-url"] + "&tr=" + response.trackers.join("&tr=") + "&ws=" + response.distros[i].versions[j]["direct-download-url"];
+      var url = response.distros[i].versions[j]["magnet-url"];
+      if (response.distros[i].trackers.length) {
+        url += "&tr=" + response.distros[i].trackers.join("&tr=");
+      }
+      url += "&tr=" + response.trackers.join("&tr=");
+      url +="&ws=" + response.distros[i].versions[j]["direct-download-url"];
       // console.log(url + '\n');
-      // fs.appendFileSync('./downloads/magnets.txt', url + '\n\n');
+      // fs.appendFileSync('./magnets.txt', url + '\n');
       urls.push(url);
     }
   }
