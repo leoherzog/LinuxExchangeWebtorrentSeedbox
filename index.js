@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const fetch = require('node-fetch');
 const webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
 const pretty = require('prettier-bytes');
 const chalk = require('chalk');
 
-var seeder = new webtorrent();
+var downloader = new webtorrent();
 
-var magnets = [];
-var directs = [];
+var urls = [];
 
 if (!fs.existsSync('/tmp')) {
   throw "/tmp does not exist";
@@ -27,34 +25,21 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     for (var j in response.distros[i].versions) {
       var url = response.distros[i].versions[j]["magnet-url"] + "&tr=" + response.trackers.join("&tr=") + "&ws=" + response.distros[i].versions[j]["direct-download-url"];
       // console.log(url + '\n');
-      // fs.appendFileSync('./magnets.txt', url + '\n');
-      magnets.push(url);
-      directs.push(response.distros[i].versions[j]["direct-download-url"]);
+      // fs.appendFileSync('./downloads/magnets.txt', url + '\n\n');
+      urls.push(url);
     }
   }
 
-  const requests = directs.map(fetch);
-  
-  directs.map(file => {
-    fetch(file).then(response => {
-      response.body.pipe(fs.createWriteStream('/tmp/' + file))
-    });
-  });
+  console.log("Starting seeding of " + urls.length + " torrents...");
 
-});
-
-function seed() {
-
-  console.log("Starting seeding of " + magnets.length + " torrents...");
-
-  for (var i in magnets) {
-    // console.log(magnets[i] + "\n");
-    seeder.add(magnets[i], { "path": "/tmp" });
+  for (var i in urls) {
+    // console.log(urls[i] + "\n");
+    downloader.add(urls[i], { "path": "/tmp" });
   }
 
   setInterval(checkProgress, 2000);
 
-}
+});
 
 function checkProgress() {
   var percentage = 0;

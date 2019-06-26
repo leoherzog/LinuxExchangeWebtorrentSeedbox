@@ -9,12 +9,10 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "async": "latest",
-    "chalk": "latest",
+    "webtorrent-hybrid": "latest",
     "get-json": "latest",
-    "node-fetch": "latest",
     "prettier-bytes": "latest",
-    "webtorrent-hybrid": "latest"
+    "chalk": "latest"
   },
   "license": "CC-BY-SA-4.0"
 }
