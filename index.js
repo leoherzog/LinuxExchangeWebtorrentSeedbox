@@ -28,7 +28,7 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
         url += "&tr=" + response.distros[i].trackers.join("&tr=");
       }
       url += "&tr=" + response.trackers.join("&tr=");
-      url +="&ws=" + response.distros[i].versions[j]["direct-download-url"];
+      url += "&ws=https://cors.linux.exchange/" + response.distros[i].versions[j]["magnet-url"].split("dn=")[1]
       // console.log(url + '\n');
       // fs.appendFileSync('./magnets.txt', url + '\n');
       urls.push(url);
