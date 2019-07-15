@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const os = require('os');
 const fs = require('fs');
 const webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
@@ -58,6 +59,7 @@ function checkProgress() {
   var summary = "";
   summary += chalk.green((percentage * 100).toFixed(1) + "% Done") + " Seeding " + chalk.green(downloader.torrents.length) + " WebTorrents ";
   summary += "↓ " + chalk.green(pretty(downloader.downloadSpeed) + "/s") + " ↑ " + chalk.green(pretty(downloader.uploadSpeed) + "/s");
+  summary += " - Free Memory: " + chalk.green(pretty(os.freemem())) + " of " + chalk.green(pretty(os.totalmem()));
   console.log(summary);
   console.log(individualprogress);
 }
