@@ -25,12 +25,14 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
   for (var i in response.distros) {
     for (var j in response.distros[i].versions) {
       var url = response.distros[i].versions[j]["magnet-url"];
+      var name = url.split("dn=")[1];
       if (response.distros[i].trackers.length) {
         url += "&tr=" + response.distros[i].trackers.join("&tr=");
       }
       url += "&tr=" + response.trackers.join("&tr=");
-      url += "&ws=https://cors.linux.exchange/" + response.distros[i].versions[j]["magnet-url"].split("dn=")[1];
+      url += "&ws=https://cors.linux.exchange/" + name;
       url += "&ws=" + response.distros[i].versions[j]["direct-download-url"];
+      url += "&xs=https://cors.linux.exchange/torrents/" + name + ".torrent";
       // console.log(url + '\n');
       // fs.appendFileSync('./magnets.txt', url + '\n');
       urls.push(url);
