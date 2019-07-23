@@ -64,7 +64,7 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 function checkProgress() {
   var percentage = 0;
   var individualprogress = "";
-  downloader.torrents.forEach(function(torrent) {
+  downloader.torrents.forEach(function(torrent, i) {
     percentage = percentage + torrent.progress;
     individualprogress += "[" + (new Number(i) + 1) + ": " + (torrent.progress * 100).toFixed(1) + "%] ";
   });
