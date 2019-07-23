@@ -6,7 +6,8 @@ After=network.target
 [Service]
 Type=simple
 User=isos
-ExecStart=/usr/bin/node /home/isos/LinuxWebtorrentSeedbox/index.js
+WorkingDirectory=/home/isos/LinuxWebtorrentSeedbox/
+ExecStart=/usr/bin/node index.js
 Restart=on-failure
 
 [Install]
