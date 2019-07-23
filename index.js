@@ -64,10 +64,10 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
 function checkProgress() {
   var percentage = 0;
   var individualprogress = "";
-  for (var i in downloader.torrents) {
-    percentage = percentage + downloader.torrents[i].progress;
-    individualprogress += "[" + (new Number(i) + 1) + ": " + (downloader.torrents[i].progress * 100).toFixed(1) + "%] ";
-  }
+  downloader.torrents.forEach(function(torrent) {
+    percentage = percentage + torrent.progress;
+    individualprogress += "[" + (new Number(i) + 1) + ": " + (torrent.progress * 100).toFixed(1) + "%] ";
+  });
   percentage = percentage / downloader.torrents.length;
   var summary = "";
   summary += chalk.green((percentage * 100).toFixed(1) + "% Done") + " Seeding " + chalk.green(downloader.torrents.length) + " WebTorrents ";
