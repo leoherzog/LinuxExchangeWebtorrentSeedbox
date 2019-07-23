@@ -9,10 +9,12 @@ const chalk = require('chalk');
 
 var downloader = new webtorrent();
 
+const dir = "./cache"
 var urls = [];
+var names = [];
 
-if (!fs.existsSync('/tmp')) {
-  throw "/tmp does not exist";
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
 
 getJSON('https://linux.exchange/distros.json', function (error, response) {
@@ -22,29 +24,38 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     process.exit();
   }
 
-  for (var i in response.distros) {
-    for (var j in response.distros[i].versions) {
-      var url = response.distros[i].versions[j]["magnet-url"];
+  response.distros.forEach(function(distro) {
+    distro.versions.forEach(function(version) {
+      var url = version["magnet-url"];
       var name = url.split("dn=")[1];
-      if (response.distros[i].trackers.length) {
-        url += "&tr=" + response.distros[i].trackers.join("&tr=");
+      names.push(name);
+      if (distro.trackers.length) {
+        url += "&tr=" + distro.trackers.join("&tr=");
       }
       url += "&tr=" + response.trackers.join("&tr=");
       url += "&ws=https://cors.linux.exchange/" + name;
-      url += "&ws=" + response.distros[i].versions[j]["direct-download-url"];
+      url += "&ws=" + version["direct-download-url"];
       url += "&xs=https://cors.linux.exchange/torrents/" + name + ".torrent";
       // console.log(url + '\n');
       // fs.appendFileSync('./magnets.txt', url + '\n');
       urls.push(url);
-    }
-  }
+    });
+  });
+
+  fs.readdir(dir, function(err, cache) {
+    var toRemove = cache.diff(names);
+    toRemove.forEach(function(filename) {
+      fs.unlink(dir + "/" + filename, function(){});
+    });
+    console.log("Removed " + toRemove.length +  " old cached file(s)");
+  });
 
   console.log("Starting seeding of " + urls.length + " torrents...");
 
-  for (var i in urls) {
-    // console.log(urls[i] + "\n");
-    downloader.add(urls[i], { "path": "/tmp" });
-  }
+  urls.forEach(function(url) {
+    // console.log(url + "\n");
+    downloader.add(url, { "path": dir });
+  });
 
   setInterval(checkProgress, 2000);
 
@@ -65,3 +76,7 @@ function checkProgress() {
   console.log(summary);
   console.log(individualprogress);
 }
+
+Array.prototype.diff = function(a) {
+  return this.filter(function(i) {return a.indexOf(i) < 0;});
+};
