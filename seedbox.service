@@ -1,0 +1,13 @@
+[Unit]
+Description=A Node service to bridge between official Linux distro torrents and webtorrents. Used to power linu$
+Documentation=https://github.com/leoherzog/LinuxWebtorrentSeedbox
+After=network.target
+
+[Service]
+Type=simple
+User=isos
+ExecStart=/usr/bin/node /home/isos/LinuxWebtorrentSeedbox/index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
