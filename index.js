@@ -6,16 +6,20 @@ const webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
 const pretty = require('prettier-bytes');
 const chalk = require('chalk');
+const shell = require('shelljs');
 
 var downloader = new webtorrent();
 
 const dir = "./cache"
-var urls = [];
+var magneturls = [];
+var directurls = [];
 var names = [];
 
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
+
+var timeInBase64 = new Buffer(new Date().getTime().toString()).toString('base64');
 
 getJSON('https://linux.exchange/distros.json', function (error, response) {
 
@@ -27,18 +31,18 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
   response.distros.forEach(function(distro) {
     distro.versions.forEach(function(version) {
       var url = version["magnet-url"];
-      var name = url.split("dn=")[1];
+      var name = version["direct-download-url"].substring(version["direct-download-url"].lastIndexOf('/') + 1);
       names.push(name);
       if (distro.trackers.length) {
         url += "&tr=" + distro.trackers.join("&tr=");
       }
       url += "&tr=" + response.trackers.join("&tr=");
-      url += "&ws=https://cors.linux.exchange/" + name;
       url += "&ws=" + version["direct-download-url"];
-      url += "&xs=https://cors.linux.exchange/torrents/" + name + ".torrent";
+      url += "&xs=https://torrents.linux.exchange/" + name + ".torrent";
       // console.log(url + '\n');
       // fs.appendFileSync('./magnets.txt', url + '\n');
-      urls.push(url);
+      magneturls.push(url);
+      directurls.push(version["direct-download-url"].replace("{{base64time}}", timeInBase64));
     });
   });
 
@@ -50,9 +54,13 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     console.log("Removed " + toRemove.length +  " old cached file(s)");
   });
 
-  console.log("Starting seeding of " + urls.length + " torrents...");
+  console.log("Populating cache...");
 
-  urls.forEach(function(url) {
+  shell.exec('aria2c -d ' + dir + ' -U "Wget/" --force-sequential --continue --optimize-concurrent-downloads "' + directurls.join('" "') + '"');
+
+  console.log("Starting seeding of " + magneturls.length + " torrents...");
+
+  magneturls.forEach(function(url) {
     // console.log(url + "\n");
     downloader.add(url, { "path": dir });
   });
