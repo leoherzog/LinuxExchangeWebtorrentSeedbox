@@ -26,8 +26,9 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     process.exit();
   }
 
-  response.distros.forEach(function(distro) {
-    distro.versions.forEach(function(version) {
+  for (var distro of response.distros) {
+    for (var version of distro.versions) {
+      if (!version["magnet-url"]) continue;
       var url = version["magnet-url"];
       var name = version["direct-download-url"].substring(version["direct-download-url"].lastIndexOf('/') + 1);
       names.push(name);
@@ -39,8 +40,8 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
       // console.log(url + '\n');
       // fs.appendFileSync('./magnets.txt', url + '\n');
       urls.push(url);
-    });
-  });
+    }
+  }
 
   fs.readdir(dir, function(err, cache) {
     var toRemove = cache.diff(names);
@@ -49,9 +50,9 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     });
     console.log("Removed " + toRemove.length +  " old cached file(s)");
   });
-  
-  console.log("Starting seeding of " + magneturls.length + " torrents...");
-  
+
+  console.log("Starting seeding of " + urls.length + " torrents...");
+
   urls.forEach(function(url) {
     // console.log(url + "\n");
     downloader.add(url, { "path": dir });
