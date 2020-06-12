@@ -6,14 +6,12 @@ const webtorrent = require('webtorrent-hybrid');
 const getJSON = require('get-json');
 const pretty = require('prettier-bytes');
 const chalk = require('chalk');
-const shell = require('shelljs');
 
 var downloader = new webtorrent();
 
 const dir = "./cache"
-var magneturls = [];
-var directurls = [];
 var names = [];
+var urls = [];
 
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
@@ -38,11 +36,9 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
       }
       url += "&tr=" + response.trackers.join("&tr=");
       url += "&ws=" + version["direct-download-url"];
-      url += "&xs=https://torrents.linux.exchange/" + name + ".torrent";
       // console.log(url + '\n');
       // fs.appendFileSync('./magnets.txt', url + '\n');
-      magneturls.push(url);
-      directurls.push(version["direct-download-url"].replace("{{base64time}}", timeInBase64));
+      urls.push(url);
     });
   });
 
@@ -53,14 +49,10 @@ getJSON('https://linux.exchange/distros.json', function (error, response) {
     });
     console.log("Removed " + toRemove.length +  " old cached file(s)");
   });
-
-  console.log("Populating cache...");
-
-  shell.exec('aria2c -d ' + dir + ' -U "Wget/" --force-sequential --continue --optimize-concurrent-downloads "' + directurls.join('" "') + '"');
-
+  
   console.log("Starting seeding of " + magneturls.length + " torrents...");
-
-  magneturls.forEach(function(url) {
+  
+  urls.forEach(function(url) {
     // console.log(url + "\n");
     downloader.add(url, { "path": dir });
   });
